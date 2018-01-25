@@ -15,7 +15,7 @@ library(plyr)
 
 
 #### set working directory ####
-workDir <- "//ARTHASERVER/Data/Alexandre/Tfc"
+workDir <- "/home/artha/R-Projects/DEQ_upload/"
 setwd(workDir)
 
 
