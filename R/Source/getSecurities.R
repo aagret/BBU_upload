@@ -22,9 +22,16 @@ getSecurities <- function(db= allPositions) {
 	missingTic <- tmpData[!Code %in% ticker$x]
 	
 	if (nrow(missingTic) != 0) {
-	    
-	    missingTic
-	    stop("new securities, please update ticker file")
+		
+		msg     <- "new securities in file, please update ticker4.csv file and re-run DEQ_upload script"
+		newRic  <- as.list(unique(missingTic$Code))
+		command <- "dmsend aagret"
+		
+		# call linux bash to send Tweet
+		system2("twidge", paste0(command, " '", msg, " new securities: ", newRic, "'"))
+		
+		# exit R script
+		stop("new securities, please update ticker file")
 	    
 	    }
 	
