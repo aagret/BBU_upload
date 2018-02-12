@@ -2,7 +2,7 @@
 #### extract cash tmpDatas ####
 extractCashTransactions <- function() {
 
-	tmpData <- extractData("Cash Transactions",
+	tmpData <- extractData("CashXTransactions",
 	                       c("Value Date", "Debit", "Credit", 
                            "Currency", "Description"),
 	                       sep= ",")

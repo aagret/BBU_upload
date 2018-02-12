@@ -11,10 +11,10 @@ getSecurities <- function(db= allPositions) {
 	setkey(tmpData, Code)
 
 	# write tickers files for manual update 
-	write.csv(unique(tmpData$Code), "ticker3.csv")
+	write.csv(unique(tmpData$Code), paste0(workDir, "ticker3.csv"))
 
 	# get tfc-bloomberg ticker equivalence !! 
-	ticker <- fread("ticker4.csv", header= TRUE, sep= ",")
+	ticker <- fread(paste0(codeDir,"ticker4.csv"), header= TRUE, sep= ",")
 
 	setkey(ticker, x)
 	

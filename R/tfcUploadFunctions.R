@@ -3,23 +3,23 @@
 #############################
 
 #### read data from filds ####
-source("R/Source/extractData.R")
+source(paste0(codeDir, "R/Source/extractData.R"))
 
 #### extract datasets ####
-source("R/Source/extractCashTransactions.R")
-source("R/Source/extractAllPositions.R")
-source("R/Source/getFxFwd.R")
-source("R/Source/getGrossDvd.R")
-source("R/Source/getDividend.R")
-source("R/Source/getSecurities.R")
-source("R/Source/getPaidFees.R")
-source("R/Source/getPaidTax.R")
-source("R/Source/getCash.R")
-source("R/Source/mergeAllDatas.R")
+source(paste0(codeDir, "R/Source/extractCashTransactions.R"))
+source(paste0(codeDir, "R/Source/extractAllPositions.R"))
+source(paste0(codeDir, "R/Source/getFxFwd.R"))
+source(paste0(codeDir, "R/Source/getGrossDvd.R"))
+source(paste0(codeDir, "R/Source/getDividend.R"))
+source(paste0(codeDir, "R/Source/getSecurities.R"))
+source(paste0(codeDir, "R/Source/getPaidFees.R"))
+source(paste0(codeDir, "R/Source/getPaidTax.R"))
+source(paste0(codeDir, "R/Source/getCash.R"))
+source(paste0(codeDir, "R/Source/mergeAllDatas.R"))
 
 #### format for BBU uplaod ####
-source("R/Source/formatBBU.R")
+source(paste0(codeDir, "R/Source/formatBBU.R"))
 
 #### optionnal extract of sub/red datas ####
-#source("R/Source/getSubRed.R")
+#source(paste0(codeDir, "R/Source/getSubRed.R"))
 

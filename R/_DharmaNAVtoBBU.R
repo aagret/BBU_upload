@@ -15,12 +15,13 @@ library(plyr)
 
 
 #### set working directory ####
-workDir <- "/home/artha/R-Projects/DEQ_upload/"
+codeDir <- "/home/artha/R-Projects/DEQ_upload/"
+workDir   <- "/home/artha/Maildir/DEQ"
 setwd(workDir)
 
 
 ### load Functions ###
-source("R/tfcUploadFunctions.R")
+source(paste0(codeDir, "R/tfcUploadFunctions.R"))
 
 
 
@@ -75,7 +76,7 @@ mergeNAV <- mergeAllDatas()
 #### format and save files for Bloomberg upload ####
 # save position file
 write.csv(rbind(securityPositions, fxFwd), 
-          "./Upload/Positions Dharma EQ.csv")
+		  paste0(codeDir, "Upload/PositionsDEQ.csv"))
 
 # # save a copy for Dharma Histo Portfolio
 # securityPositions$`Portfolio Name` <- 
@@ -89,14 +90,14 @@ securityPositions$`Portfolio Name` <-
     fxFwd$`Portfolio Name`  <- "DHARMA STRATEGY"
 
 write.csv(rbind(securityPositions, fxFwd), 
-          "./Upload/Positions Dharma Strategy.csv")
+		  paste0(codeDir, "Upload/PositionsDharmaStrategy.csv"))
 
 # save a copy for Dharma Strategy
 securityPositions$`Portfolio Name` <- 
     fxFwd$`Portfolio Name`  <- "DHARMA EQ EX CASH"
 
 write.csv(rbind(securityPositions, fxFwd), 
-          "./Upload/Positions Dharma EQ ex Cash.csv")
+		  paste0(codeDir, "Upload/PositionsDEQexCash.csv"))
 
 # format cash positions 
 fileToUploadToBBU <- formatBBU()
@@ -105,7 +106,7 @@ fileToUploadToBBU <- formatBBU()
 fileToUploadToBBU <- fileToUploadToBBU[Date %in% securityPositions$Date, ]
 
 # save cash file
-write.csv(fileToUploadToBBU, file= "./Upload/Cash & Fees Dharma EQ.csv")
+write.csv(fileToUploadToBBU, file= paste0(codeDir, "Upload/CashFeesDEQ.csv"))
 
 # # save a copy for Dharma Histo Portfolio
 # fileToUploadToBBU$`Portfolio Name` <- "DHARMA D HISTO"
@@ -115,6 +116,7 @@ write.csv(fileToUploadToBBU, file= "./Upload/Cash & Fees Dharma EQ.csv")
 # save a copy for Dharma Strategy
 fileToUploadToBBU$`Portfolio Name` <- "DHARMA STRATEGY"
 
-write.csv(fileToUploadToBBU, file= "./Upload/Cash & Fees Dharma Strategy.csv")
+write.csv(fileToUploadToBBU, file= paste0(codeDir, "Upload/CashFeesDharmaStrategy.csv"))
+
 
 
