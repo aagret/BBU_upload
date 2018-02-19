@@ -8,7 +8,7 @@ extractAllPositions <- function() {
 	                         "VB_devise_portefeuille", "Quantite", 
 	                         "Categorie_valeur", "Code_valeur",
 	                         "Libelle_valeur", "Type_stock", 
-	                         "Type_valeur"),
+	                         "Type_valeur", "Statut_ligne", "Date_echeance"),
 	                       sep= ";")
 
 	#### format positions datas ####
@@ -17,7 +17,7 @@ extractAllPositions <- function() {
 
 	colnames(tmpData) <- c("Date", "Devise","BaseAmount", "Amount",
 	                       "Quantity", "Category", "Code","Description", 
-	                       "TypeStock", "TypeValeur")
+	                       "TypeStock", "TypeValeur", "Statut", "Echeance")
 
 	tmpData[, ":=" (Date=       as.Date(Date, format= "%d/%m/%Y"),
 					BaseAmount= as.numeric(gsub(" ", "", BaseAmount)),
