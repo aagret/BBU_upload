@@ -1,35 +1,50 @@
 
 getFxFwd <- function(db= allPositions, pName= "DHARMA EQ") {
-	# function to extract Fx Forward datas from list of positions
-	
-	tmpData <- db[TypeStock == "AD1" & Category == "CAT",
-				  .(Date, Description, Quantity, Amount)]
-	
-	tmpData[, ":=" (PortfolioName= pName,
-					Price=         0, 
-					Amount=        NULL,
-					Description=   paste(substr(Description,
-												nchar(Description) - 5,
-												nchar(Description) - 3),
-										 "/",
-										 substr(Description, 
-										 	   nchar(Description) - 2, 
-										 	   nchar(Description)),
-										 " R BGN ",
-										 format(as.Date(gsub("[^0-9]", "",
-										 					Description),
-										 					"%y%m%d"),
-										 	   "%m/%d/%Y"),
-										 "@ Curncy", sep= "")
-					)
-			]
-
-	setcolorder(tmpData, c(4, 2, 3, 5, 1))
-	
-	colnames(tmpData) <- c("PortfolioName", "SecurityId",
-						   "Quantity", "Price", "Date")
-
-	#tmpData[, Price:=as.numeric(Price)]
-
-	return(tmpData)
+    # function to extract Fx Forward datas from list of positions
+    
+    tmpData <- db[TypeStock == "AD1" & Category == "CAT" & Devise != "EUR",
+                  .(Date, Description, Quantity, Devise, Statut, Echeance)]
+    
+    
+    tmpData[, Description:= mapply(function(x,y) sub(x, "", y), Devise, Description)]
+    
+    
+    tmpData[Statut != "ACHLIG", 
+    		":=" (`Portfolio Name`= pName, 
+    			  Price=            0, 
+    			  Description=      paste(Devise,
+    			  						"/",
+    			  						gsub("A|OACT|/|[0-9]","", Description),
+    			  						" R BGN ",
+    			  						format(as.Date(Echeance, "%y%m%d"),
+    			  							   "%Y%m%d"),
+    			  						"@ Curncy", sep= "")
+    		)
+    		]
+    
+    
+    tmpData[Statut == "ACHLIG",
+    		":=" (`Portfolio Name`= pName, 
+    			  Price=            0, 
+    			  
+    			  Description=      paste("EUR/",
+    			  						Devise,
+    			  						" R BGN ",
+    			  						format(as.Date(Echeance, "%y%m%d"),
+    			  							   "%m/%d/%Y"),
+    			  						"@ Curncy", sep= "")
+    		)
+    		]
+    
+   
+    
+    tmpData$Devise <- tmpData$Statut <- tmpData$Echeance <- NULL
+    
+    setcolorder(tmpData, c(4, 2, 3, 5, 1))
+    
+    colnames(tmpData) <- c("Portfolio Name", "Security ID",
+    					   "Quantity","Price", "Date")
+    
+    return(tmpData)
+    
 }
