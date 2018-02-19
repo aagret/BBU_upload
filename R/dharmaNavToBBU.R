@@ -3,27 +3,6 @@
 ## to produce uploadable files to be automatically send to Bloomberg to feed the 
 ## PORT functions.
 
-########################
-########  Init  ########
-########################
-
-
-#### initiate requested libraries ####
-library(data.table)
-library(plyr)
-#library(zoo)
-
-
-#### set working directory ####
-codeDir <- "/home/artha/R-Projects/DEQ_upload/"
-workDir   <- "/home/artha/Maildir/DEQ"
-setwd(workDir)
-
-
-### load Functions ###
-source(paste0(codeDir, "R/tfcUploadFunctions.R"))
-
-
 
 ###########  ###########
 ########  Main  ########
@@ -31,12 +10,13 @@ source(paste0(codeDir, "R/tfcUploadFunctions.R"))
 
 
 #### extract Cash & Positions datas ####
-cashTransactions  <- extractCashTransactions()
 allPositions      <- extractAllPositions()
 
 cash              <- getCash(allPositions)
-fxFwd             <- getFxFwd(allPositions)
-securityPositions <- getSecurities(allPositions)
+fxFwd             <- getFxFwd(allPositions, pName)
+securityPositions <- getSecurities(allPositions, pName)
+
+cashTransactions  <- extractCashTransactions()
 
 paidFees          <- getPaidFees(cashTransactions)
 dividend          <- getDividend(cashTransactions)
@@ -75,38 +55,38 @@ mergeNAV <- mergeAllDatas()
     
 #### format and save files for Bloomberg upload ####
 # save position file
-write.csv(rbind(securityPositions, fxFwd), 
-		  paste0(codeDir, "Upload/PositionsDEQ.csv"))
-
-# # save a copy for Dharma Histo Portfolio
+# write.csv(rbind(securityPositions, fxFwd), 
+# 		  paste0(codeDir, "Upload/PositionsDEQ.csv"))
+# 
+# # # save a copy for Dharma Histo Portfolio
+# # securityPositions$`Portfolio Name` <- 
+# #     fxFwd$`Portfolio Name`  <- "DHARMA D HISTO"
+# # 
+# # write.csv(rbind(securityPositions, fxFwd), 
+# #           "./Upload/Positions Dharma D Histo.csv")
+# 
+# # save a copy for Dharma Strategy
 # securityPositions$`Portfolio Name` <- 
-#     fxFwd$`Portfolio Name`  <- "DHARMA D HISTO"
+# 	fxFwd$`Portfolio Name`  <- "DHARMA STRATEGY"
 # 
 # write.csv(rbind(securityPositions, fxFwd), 
-#           "./Upload/Positions Dharma D Histo.csv")
-
-# save a copy for Dharma Strategy
-securityPositions$`Portfolio Name` <- 
-    fxFwd$`Portfolio Name`  <- "DHARMA STRATEGY"
-
-write.csv(rbind(securityPositions, fxFwd), 
-		  paste0(codeDir, "Upload/PositionsDharmaStrategy.csv"))
-
-# save a copy for Dharma Strategy
-securityPositions$`Portfolio Name` <- 
-    fxFwd$`Portfolio Name`  <- "DHARMA EQ EX CASH"
-
-write.csv(rbind(securityPositions, fxFwd), 
-		  paste0(codeDir, "Upload/PositionsDEQexCash.csv"))
+# 		  paste0(codeDir, "Upload/PositionsDharmaStrategy.csv"))
+# 
+# # save a copy for Dharma Strategy
+# securityPositions$`Portfolio Name` <- 
+# 	fxFwd$`Portfolio Name`  <- "pName EX CASH"
+# 
+# write.csv(rbind(securityPositions, fxFwd), 
+# 		  paste0(codeDir, "Upload/PositionsDEQexCash.csv"))
 
 # format cash positions 
-fileToUploadToBBU <- formatBBU()
+fileToUploadToBBU <- formatBBU(pName)
 
 # remove cash transactions accounted outside NAV dates
 fileToUploadToBBU <- fileToUploadToBBU[Date %in% securityPositions$Date, ]
 
 # save cash file
-write.csv(fileToUploadToBBU, file= paste0(codeDir, "Upload/CashFeesDEQ.csv"))
+#write.csv(fileToUploadToBBU, file= paste0(codeDir, "Upload/CashFeesDEQ.csv"))
 
 # # save a copy for Dharma Histo Portfolio
 # fileToUploadToBBU$`Portfolio Name` <- "DHARMA D HISTO"
@@ -114,9 +94,13 @@ write.csv(fileToUploadToBBU, file= paste0(codeDir, "Upload/CashFeesDEQ.csv"))
 # write.csv(fileToUploadToBBU, file= "./Upload/Cash & Fees Dharma D Histo.csv")
 
 # save a copy for Dharma Strategy
-fileToUploadToBBU$`Portfolio Name` <- "DHARMA STRATEGY"
+#fileToUploadToBBU$`Portfolio Name` <- "DHARMA STRATEGY"
 
-write.csv(fileToUploadToBBU, file= paste0(codeDir, "Upload/CashFeesDharmaStrategy.csv"))
+#write.csv(fileToUploadToBBU, file= paste0(codeDir, "Upload/CashFeesDharmaStrategy.csv"))
 
 
+upload <- rbindlist(list(securityPositions, fxFwd, fileToUploadToBBU))
+setkey(upload, Date)
+
+write.csv(upload, file= paste0(codeDir, "Upload/upload", gsub(" ", "", pName), ".csv"))
 

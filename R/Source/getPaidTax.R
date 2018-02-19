@@ -7,7 +7,7 @@ getPaidTaxes <- function (db= dividend) {
 
 	colnames(tmpData)[3] <- "paidTaxes"
 
-# reformat to one column per currency
+	# reformat to one column per currency
 	tmpData <- dcast(tmpData, Date ~Ticker, value.var= "paidTaxes")
 	
 	return(tmpData)

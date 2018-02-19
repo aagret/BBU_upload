@@ -15,19 +15,17 @@ extractAllPositions <- function() {
 	tmpData[Devise_valeur == "", Devise_valeur:= Devise_cotation]
 	tmpData[, Devise_cotation:= NULL]
 
-	colnames(tmpData) <- c("Date", "Devise","Base_Amount", "Amount",
+	colnames(tmpData) <- c("Date", "Devise","BaseAmount", "Amount",
 	                       "Quantity", "Category", "Code","Description", 
 	                       "TypeStock", "TypeValeur")
 
-	tmpData[, ":=" (Date=        as.Date(Date, format= "%d/%m/%Y"),
-	                Base_Amount= as.numeric(gsub(" ", "", Base_Amount)),
-	                Amount=      as.numeric(gsub(" ", "", Amount)),
-	                Quantity=    as.numeric(gsub(" ", "", Quantity))
+	tmpData[, ":=" (Date=       as.Date(Date, format= "%d/%m/%Y"),
+					BaseAmount= as.numeric(gsub(" ", "", BaseAmount)),
+					Amount=     as.numeric(gsub(" ", "", Amount)),
+					Quantity=   as.numeric(gsub(" ", "", Quantity))
 					)
 			]
-
-	setkey(tmpData, Date)
 	
-	return(tmpData)
+	setkey(tmpData, Date)
 	
 }

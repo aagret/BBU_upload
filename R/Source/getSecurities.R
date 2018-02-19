@@ -1,20 +1,22 @@
 
 #### get security positions ####
-getSecurities <- function(db= allPositions) {
+getSecurities <- function(db= allPositions, pName= "DHARMA EQ") {
 
 	tmpData <- db[Category == "VMOB" | 
-	                  Category == "CRNE" |
-	                  (Category == "FUTU" & TypeStock == "HOBI"),
-	                        sum(Quantity),
-	                        by= .(Date, Code, Description)]
+				  	Category == "CRNE" |
+				  	(Category == "FUTU" & TypeStock == "HOBI"),
+				  sum(Quantity),
+				  by= .(Date, Code, Description)]
 
 	setkey(tmpData, Code)
 
 	# write tickers files for manual update 
-	write.csv(unique(tmpData$Code), paste0(workDir, "ticker3.csv"))
+	write.csv(unique(tmpData$Code), 
+			  paste0(codeDir, "tickerNav", gsub(" ", "", pName, ".csv")))
 
 	# get tfc-bloomberg ticker equivalence !! 
-	ticker <- fread(paste0(codeDir,"ticker4.csv"), header= TRUE, sep= ",")
+	ticker <- fread(paste0(codeDir,"tickerBloom", gsub(" ", "", pName), ".csv"), 
+					header= TRUE, sep= ",")
 
 	setkey(ticker, x)
 	
@@ -39,7 +41,7 @@ getSecurities <- function(db= allPositions) {
 	# format securites datas 
 	tmpData <- ticker[tmpData][,.(V3, Date, i.V1)]
 	
-	tmpData[, Date:=as.Date(Date)]
+	#tmpData[, Date:=as.Date(Date)]
 	
 	setkey(tmpData, Date)
 
@@ -49,15 +51,22 @@ getSecurities <- function(db= allPositions) {
 	                            stringsAsFactors = FALSE),
 	                 tmpData)
 
-	tmpData[, ":=" (`Portfolio Name`= "DHARMA EQ",
-	                Type= "",
-	                Price= "")
+	tmpData[, ":=" (`Portfolio Name`= pName,
+	                Price= 0)
+			
+	#tmpData[, ":=" (`Portfolio Name`= pName)
 			]
 
-	setcolorder(tmpData, c(4, 1, 5, 3, 6, 2))
+	setcolorder(tmpData, c(4, 1, 3, 5, 2))
+	#setcolorder(tmpData, c(4, 1, 3, 2))
 
-	colnames(tmpData) <- c("Portfolio Name", "Security ID", "Type",
-	                       "Quantity","Price", "Date")
+	colnames(tmpData) <- c("PortfolioName", "SecurityId",
+						   "Quantity","Price", "Date")
+	
+	#colnames(tmpData) <- c("PortfolioName", "SecurityId",
+	#					   "Quantity", "Date")
+	
+	#tmpData[, Price:=as.numeric(Price)]
 	
 	return(tmpData)
 	

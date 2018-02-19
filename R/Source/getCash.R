@@ -4,8 +4,8 @@ getCash <- function(db= allPositions) {
 
 	tmpData <- db[Category %in% c("TRES","CPON") | 
 	                  (Category =="FUTU" & TypeStock=="AD1"),
-	              sum(Base_Amount),
-	              by= .(Date, Devise)]
+				  sum(BaseAmount),
+				  by= .(Date, Devise)]
 
 	tmpData[, Ticker:= paste0(Devise, " Curncy")]
 
@@ -15,6 +15,4 @@ getCash <- function(db= allPositions) {
 
 	tmpData <- dcast(tmpData, Date ~Ticker, value.var= "inBase")
 
-	return(tmpData)
-	
 }

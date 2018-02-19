@@ -2,17 +2,17 @@
 #### extract cash tmpDatas ####
 extractCashTransactions <- function() {
 
-	tmpData <- extractData("CashXTransactions",
-	                       c("Value Date", "Debit", "Credit", 
-                           "Currency", "Description"),
-	                       sep= ",")
+	tmpData <- extractData("Cash",
+						   c("Booking Date", "Debit", "Credit",
+						     "Currency", "Description"),
+						   sep= ",")
 
 	#### format cash tmpDatas ####
 	colnames(tmpData)[1] <- "Date"
 
-	tmpData[, ":=" (Date=   as.Date(Date, "%d/%m/%Y"),
-							Debit=  as.numeric(gsub(",", "", Debit)),
-							Credit= as.numeric(gsub(",", "", Credit))
+	tmpData[, ":=" (Date= as.Date(Date, "%d/%m/%Y"),
+					Debit=  as.numeric(gsub(",", "", Debit)),
+					Credit= as.numeric(gsub(",", "", Credit))
 					)
 			]
 
@@ -22,7 +22,5 @@ extractCashTransactions <- function() {
 	tmpData <- unique(tmpData)
 
 	setkey(tmpData, Date)
-
-	return(tmpData)
 
 }
