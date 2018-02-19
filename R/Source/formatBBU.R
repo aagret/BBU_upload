@@ -7,7 +7,7 @@ formatBBU <- function(pName= "DHARMA EQ") {
 	
 	fees[, ':=' (Quantity=      - 1, Price= - TotalFees, 
 				 PortfolioName= pName, 
-				 SecurityId=    ifelse(pName == "DHARMA EQ", ".TFCFEES FP Equity", "DFIFEES FP Equity")
+				 SecurityId=    ifelse(pName == "DHARMA EQ", ".TFCFEES FP Equity", ".DFIFEES FP Equity")
 	)
 	]
 	
