@@ -51,8 +51,8 @@ colnames(fxPnL) <- c("Date","FxPnL")
 
 #### merge all datas in one table ####
 mergeNAV <- mergeAllDatas()
-    
-    
+
+
 #### format and save files for Bloomberg upload ####
 # save position file
 # write.csv(rbind(securityPositions, fxFwd), 

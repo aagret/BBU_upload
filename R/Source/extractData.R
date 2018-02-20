@@ -5,9 +5,9 @@ extractData <- function(searchString, colSelect= NULL, sep= ",") {
     fileNames 	<- list.files(path = workDir, full.names= TRUE)
     
     tmpData <- fileNames[grep(searchString, fileNames)]
-    tmpData <- ldply(tmpData, function(x) fread(x, sep= sep, 
-                                                header= TRUE, 
-                                                select= colSelect))
+    tmpData <- ldply(tmpData, function(x) fread(x, sep= sep,
+    											header= TRUE, 
+    											select= colSelect))
     
     tmpData <- as.data.table(unique(tmpData), key= Date)
     
