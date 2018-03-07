@@ -15,9 +15,9 @@ getFxFwd <- function(db= allPositions, pName= "DHARMA EQ") {
 				  Description=      paste(Devise,
 				  						"/",
 				  						gsub("A|OACT|/| |[0-9]","", Description),
-				  						" R BGN @",
+				  						" ",
 				  						format(as.Date(Echeance, "%d/%m/%Y"),
-				  							   "%Y%m%d"),
+				  							   "%m/%d/%Y"),
 				  						" Curncy", sep= "")
 			)
 			]
@@ -29,9 +29,9 @@ getFxFwd <- function(db= allPositions, pName= "DHARMA EQ") {
 				  
 				  Description=      paste("EUR/",
 				  						Devise,
-				  						" R BGN @",
+				  						" ",
 				  						format(as.Date(Echeance, "%d/%m/%Y"),
-				  							   "%Y%m%d"),
+				  							   "%m/%d/%Y"),
 				  						" Curncy", sep= "")
 			)
 			]
