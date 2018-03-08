@@ -30,7 +30,9 @@ getSecurities <- function(db= allPositions, pName= "DHARMA EQ") {
 		command <- "dmsend aagret"
 		
 		# call linux bash to send Tweet
-		system2("twidge", paste0(command, " '", msg, " new securities: ", newRic, "'"))
+		system2("twidge", paste0(command, " '", msg, 
+								 " new securities: ", 
+								 do.call(paste,newRic), "'"))
 		
 		# exit R script
 		stop("new securities, please update ticker file")
