@@ -14,6 +14,13 @@ allPositions      <- extractAllPositions()
 
 cash              <- getCash(allPositions)
 fxFwd             <- getFxFwd(allPositions, pName)
+
+
+#### TEMP
+# fxFwd <- fxFwd[0, ]
+#### TEMP
+
+
 securityPositions <- getSecurities(allPositions, pName)
 
 cashTransactions  <- extractCashTransactions()
@@ -44,60 +51,21 @@ accruedFees     <- allPositions[TypeValeur %in% c("FP", "FA"),
                                 sum(Amount), by= Date]
 colnames(accruedFees)[2]     <- "AccruedFees"
 
-fxPnL <- allPositions[TypeStock == "AD1" & Category == "CAT", 
-                      .(Date, Amount)][, sum(Amount), by= Date]
+fxPnL <- allPositions[TypeStock == "AD1" & Category == "CAT",
+					  .(Date, Amount)][, sum(Amount), by = Date]
 colnames(fxPnL) <- c("Date","FxPnL")
 
 
 #### merge all datas in one table ####
 mergeNAV <- mergeAllDatas()
+fwrite(mergeNAV, "/home/Alexandre/R-Projects/Allocator/RawData/mergeNAV.csv")
 
-
-#### format and save files for Bloomberg upload ####
-# save position file
-# write.csv(rbind(securityPositions, fxFwd), 
-# 		  paste0(codeDir, "Upload/PositionsDEQ.csv"))
-# 
-# # # save a copy for Dharma Histo Portfolio
-# # securityPositions$`Portfolio Name` <- 
-# #     fxFwd$`Portfolio Name`  <- "DHARMA D HISTO"
-# # 
-# # write.csv(rbind(securityPositions, fxFwd), 
-# #           "./Upload/Positions Dharma D Histo.csv")
-# 
-# # save a copy for Dharma Strategy
-# securityPositions$`Portfolio Name` <- 
-# 	fxFwd$`Portfolio Name`  <- "DHARMA STRATEGY"
-# 
-# write.csv(rbind(securityPositions, fxFwd), 
-# 		  paste0(codeDir, "Upload/PositionsDharmaStrategy.csv"))
-# 
-# # save a copy for Dharma Strategy
-# securityPositions$`Portfolio Name` <- 
-# 	fxFwd$`Portfolio Name`  <- "pName EX CASH"
-# 
-# write.csv(rbind(securityPositions, fxFwd), 
-# 		  paste0(codeDir, "Upload/PositionsDEQexCash.csv"))
 
 # format cash positions 
 fileToUploadToBBU <- formatBBU(pName)
 
 # remove cash transactions accounted outside NAV dates
 fileToUploadToBBU <- fileToUploadToBBU[Date %in% securityPositions$Date, ]
-
-# save cash file
-#write.csv(fileToUploadToBBU, file= paste0(codeDir, "Upload/CashFeesDEQ.csv"))
-
-# # save a copy for Dharma Histo Portfolio
-# fileToUploadToBBU$`Portfolio Name` <- "DHARMA D HISTO"
-# 
-# write.csv(fileToUploadToBBU, file= "./Upload/Cash & Fees Dharma D Histo.csv")
-
-# save a copy for Dharma Strategy
-#fileToUploadToBBU$`Portfolio Name` <- "DHARMA STRATEGY"
-
-#write.csv(fileToUploadToBBU, file= paste0(codeDir, "Upload/CashFeesDharmaStrategy.csv"))
-
 
 upload <- rbindlist(list(securityPositions, fxFwd, fileToUploadToBBU))
 setkey(upload, Date)
