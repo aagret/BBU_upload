@@ -19,7 +19,7 @@ codeDir <- "/home/artha/R-Projects/BBU_upload/"
 workDir   <- "/home/artha/Maildir/DEQ"
 setwd(workDir)
 
-pName <- "DHARMA EQ"
+pName <- "DEQ"
 
 ### load Functions ###
 source(paste0(codeDir, "R/tfcUploadFunctions.R"))

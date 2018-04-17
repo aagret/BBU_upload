@@ -1,5 +1,5 @@
 
-formatBBU <- function(pName= "DHARMA EQ") {
+formatBBU <- function(pName= "DEQ") {
     # function to reformat datas for BBU Bloomberg Upload
     
 	# fees
@@ -7,7 +7,7 @@ formatBBU <- function(pName= "DHARMA EQ") {
 	
 	fees[, ':=' (Quantity=      - 1, Price= - TotalFees, 
 				 PortfolioName= pName, 
-				 SecurityId=    ifelse(pName == "DHARMA EQ", ".TFCFEES FP Equity", ".DFIFEES FP Equity")
+				 SecurityId=    ifelse(pName == "DEQ", ".TFCFEES FP Equity", ".DFIFEES FP Equity")
 	)
 	]
 	

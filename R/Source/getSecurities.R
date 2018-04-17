@@ -1,6 +1,6 @@
 
 #### get security positions ####
-getSecurities <- function(db= allPositions, pName= "DHARMA EQ") {
+getSecurities <- function(db= allPositions, pName= "DEQ") {
 
 	tmpData <- db[Category == "VMOB" | 
 				  	Category == "CRNE" |

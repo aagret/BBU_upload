@@ -19,7 +19,7 @@ codeDir <- "/home/artha/R-Projects/BBU_upload/"
 workDir   <- "/home/artha/Maildir/DFI"
 setwd(workDir)
 
-pName <- "DHARMA FI"
+pName <- "DFI"
 
 ### load Functions ###
 source(paste0(codeDir, "R/tfcUploadFunctions.R"))
