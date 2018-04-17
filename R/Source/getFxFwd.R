@@ -1,5 +1,5 @@
 
-getFxFwd <- function(db= allPositions, pName= "DHARMA EQ") {
+getFxFwd <- function(db= allPositions, pName= "DEQ") {
     # function to extract Fx Forward datas from list of positions
     
 	tmpData <- db[TypeStock == "AD1" & Category == "CAT" & Devise != "EUR",
@@ -18,7 +18,7 @@ getFxFwd <- function(db= allPositions, pName= "DHARMA EQ") {
 				  						" ",
 				  						format(as.Date(Echeance, "%d/%m/%Y"),
 				  							   "%m/%d/%Y"),
-				  						" Curncy", sep= "")
+				  						" @ BGN Curncy", sep= "")
 			)
 			]
 	
@@ -32,7 +32,7 @@ getFxFwd <- function(db= allPositions, pName= "DHARMA EQ") {
 				  						" ",
 				  						format(as.Date(Echeance, "%d/%m/%Y"),
 				  							   "%m/%d/%Y"),
-				  						" Curncy", sep= "")
+				  						" @ BGN Curncy", sep= "")
 			)
 			]
 	
