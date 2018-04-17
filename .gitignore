@@ -7,3 +7,5 @@ outputFile.Rout
 errorFile.Rout
 tickerBloomDHARMAFI.csv
 tickerNavDHARMAFI
+tickerBloomDHARMAEQ.csv
+tickerNavDHARMAEQ
