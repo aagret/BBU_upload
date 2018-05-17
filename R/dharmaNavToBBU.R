@@ -67,7 +67,7 @@ fileToUploadToBBU <- formatBBU(pName)
 # remove cash transactions accounted outside NAV dates
 fileToUploadToBBU <- fileToUploadToBBU[Date %in% securityPositions$Date, ]
 
-upload <- rbindlist(list(securityPositions, fxFwd, fileToUploadToBBU))
+upload <- rbindlist(list(securityPositions, fxFwd, fileToUploadToBBU), fill=TRUE)
 setkey(upload, Date)
 
 write.csv(upload, file= paste0(codeDir, "Upload/upload", gsub(" ", "", pName), ".csv"))

@@ -23,7 +23,7 @@ getSecurities <- function(db= allPositions, pName= "DEQ") {
 	# check if missing tickers
 	missingTic <- tmpData[!Code %in% ticker$x]
 	
-	if (nrow(missingTic) != 0) {
+	if (nrow(missingTic)) {
 		
 		msg     <- "new securities in file, please update ticker4.csv file and re-run DEQ_upload script"
 		newRic  <- as.list(unique(missingTic$Code))
