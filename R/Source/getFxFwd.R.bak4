@@ -1,0 +1,84 @@
+
+getFxFwd <- function(db= allPositions, pName= "DEQ") {
+    
+	# function to extract Fx Forward datas from list of positions
+    
+
+
+
+	
+	# 1 line per trade
+	tmpData <- allPositions[
+		Category== "CAT" &
+			TypeStock =="HOBI" &
+			BaseAmount == Quantity,
+		.(Date, Description, Amount, BaseAmount,
+		  Quantity, Devise, Statut, Echeance)]
+
+
+	tmpData[, Description:= gsub("[0-9 :blank: 'OACT' '/']+",
+								 "",
+								 Description)]
+
+	tmpData[, Description:= mapply(function(x,y)
+		sub(x, "", y), Devise, Description)]
+
+	tmpData[,
+			":=" (`Portfolio Name`= pName,
+				  Price=            0,
+				  Description=      paste(Devise,
+				  						"/",
+				  						Description,
+				  						" ",
+				  						format(as.Date(Echeance, "%d/%m/%Y"),
+				  							   "%m/%d/%Y"),
+				  						" Curncy", sep= ""),
+				  Quantity=         Quantity,
+				  Cost=             Quantity / BaseAmount )]
+
+	tmpData$Devise <- tmpData$Statut <- tmpData$Echeance <- tmpData$BaseAmount <- NULL
+	setcolorder(tmpData, c(4, 2, 3, 5, 1, 6))
+	# end 1 line per trade
+	
+	
+	
+	# # 2 lines per trade
+	# tmpData <- allPositions[
+	# 	Category== "CAT" &
+	# 		TypeStock =="HOBI",
+	# 	.(Date, Description, # Amount,
+	# 	  Quantity, Devise, Statut, Echeance)]
+	# 
+	# tmpData[,
+	# 		":=" (#`Portfolio Name`= pName,
+	# 			  #Price=            0,
+	# 			  Description=      paste(Devise,
+	# 			  						"/",
+	# 			  						Devise,
+	# 			  						" ",
+	# 			  						format(as.Date(Echeance, "%d/%m/%Y"),
+	# 			  							   "%m/%d/%Y"),
+	# 			  						" Curncy", sep= ""),
+	# 			  Quantity=        - Quantity
+	# 		),
+	# 		by= .(Description, Date)]
+	# 
+	# 	
+	# tmpData <- tmpData[, .(`Portfolio Name`= pName,
+	# 					   Price=            0,
+	# 					   sum(Quantity)), 
+	# 				   by= .(Description, Date)][V3 != 0,]
+	# 
+	# setcolorder(tmpData, c(3, 1, 5, 4, 2))
+	# 
+	# # end of 2 lines per trade
+	
+	
+
+	
+	colnames(tmpData) <- c("Portfolio Name", "Security ID",
+						   "Quantity","Price", "Date")
+	
+	return(tmpData)
+    
+}
