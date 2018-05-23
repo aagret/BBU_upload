@@ -68,6 +68,8 @@ fileToUploadToBBU <- formatBBU(pName)
 fileToUploadToBBU <- fileToUploadToBBU[Date %in% securityPositions$Date, ]
 
 upload <- rbindlist(list(securityPositions, fxFwd, fileToUploadToBBU), fill=TRUE)
+upload[is.na(upload)] <- 0
+
 setkey(upload, Date)
 
 write.csv(upload, file= paste0(codeDir, "Upload/upload", gsub(" ", "", pName), ".csv"))
