@@ -3,16 +3,16 @@
 
 library(readxl)
 
-filename <- commandArgs(TRUE)[1]
+filename <- commandArgs(trailingOnly = TRUE)
 
-if (exists(filename)) {
+if (exists("filename")) {
 
 	data <- read_excel(path = paste0("~/Maildir/SubRed/", filename), sheet= 1)
-	data <- data[, c(2,6,7,9,13,14,15,16,41,44)]
+	data <- data[, c(2,6,7,9,13,14,15,16,36, 41,44)]
 
 	colnames(data) <- c("Type", "Fund", "NavDate", "Shares", 
 						"Amount", "Currency", "LastNavDate", 
-						"NAV", "Custody", "Holder")
+						"NAV", "OrderBy", "Custody", "Holder")
 
 	status <- ifelse(grepl("FINAL", filename), "Confirmation", "NEW")
 
@@ -20,7 +20,7 @@ if (exists(filename)) {
 
 		db <- data[n,]
 
-		type <- ifelse(db$`Tranype` == "RED", "Redemption", "Subscription")
+		type <- ifelse(db$`Type` == "RED", "Redemption", "Subscription")
 
 		fund <- ifelse(grepl("Equity", db$Fund), "DEQ", "DFI")
 
@@ -42,13 +42,13 @@ if (exists(filename)) {
 						 
 						 '"')
 		
-		command <- paste("twidge dmsend aagret ", message)
+		command <- paste("twidge dmsend aagret ",         message)
+		command <- paste("twidge dmsend paulinequirin1 ", message)
 		
 		system(command)
 
 	} 
 	
-	else system("twidge dmsend aagret 'No Sub/Red'")
+	} else system("twidge dmsend aagret 'No Sub/Red'")
 	
-}
 
