@@ -43,7 +43,7 @@ securitiesValue <- allPositions[Category == "VMOB",
                                 sum(Amount), by= Date]
 colnames(securitiesValue)[2] <- "Securities"
 
-payableFees     <- allPositions[TypeValeur %in% c("PF", "AF"), 
+payableFees     <- allPositions[TypeValeur %in% c("PF", "AF", "PM"), 
                                 sum(Amount), by= Date]
 colnames(payableFees)[2]     <- "PayableFees"
 
@@ -65,7 +65,7 @@ fwrite(mergeNAV, "/home/Alexandre/R-Projects/Allocator/RawData/mergeNAV.csv")
 fileToUploadToBBU <- formatBBU(pName)
 
 # remove cash transactions accounted outside NAV dates
-fileToUploadToBBU <- fileToUploadToBBU[Date %in% securityPositions$Date, ]
+#fileToUploadToBBU <- fileToUploadToBBU[Date %in% securityPositions$Date, ]
 
 upload <- rbindlist(list(securityPositions, fxFwd, fileToUploadToBBU), fill=TRUE)
 upload[is.na(upload)] <- 0
